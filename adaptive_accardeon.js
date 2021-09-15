@@ -1,9 +1,9 @@
 "use strict"
 
-const spollersArray = document.querySelectorAll('[data-spollers]');
+const spollersArray = document.querySelectorAll('[data-spoller]');
 if (spollersArray.length > 0) {
    const spollersRegular = Array.from(spollersArray).filter(function (item, index, self) {
-      return !item.dataset.spollers.split(",")[0];
+      return !item.dataset.spoller.split(",")[0];
    });
 
    if (spollersRegular.length > 0) {
@@ -11,13 +11,13 @@ if (spollersArray.length > 0) {
    }
 
    const spollersMedia = Array.from(spollersArray).filter(function (item, index, self) {
-      return item.dataset.spollers.split(",")[0];
+      return item.dataset.spoller.split(",")[0];
    });
 
    if (spollersRegular.length > 0) {
       const breakpointsArray = [];
       spollersMedia.forEach(item => {
-         const params = item.dataset.spollers;
+         const params = item.dataset.spoller;
          const breakpoint = {};
          const paramsArray = params.split(",");
          breakpoint.value = paramsArray[0];
@@ -29,7 +29,7 @@ if (spollersArray.length > 0) {
       let mediaQueries = breakpointsArray.map(function (item) {
          return '(' + item.type + "-width:" + item.value + "px)," + item.value + ',' + item.type;
       });
-      mediaQueries = mediaQuerie.filter(function (item, index, self) {
+      mediaQueries = mediaQueries.filter(function (item, index, self) {
          return self.indexOf(item) === index;
       });
 
@@ -66,9 +66,9 @@ if (spollersArray.length > 0) {
       });
    }
    function initSpollersBody(spollersBlock, hideSpollerBody = false) {
-      const spollersTitle = spollersBlock.querySelectorAll('[data-spollers]');
-      if (spollersTitle.length > 0) {
-         spollersTitle.forEach(spollersTitle => {
+      const spollerTitles = spollersBlock.querySelectorAll('[data-spoller]');
+      if (spollerTitles.length > 0) {
+         spollerTitles.forEach(spollersTitle => {
             if (hideSpollerBody) {
                spollersTitle.removeAttribute('tabindex');
                if (!spollersTitle.classList.contains('_active')) {
@@ -79,6 +79,22 @@ if (spollersArray.length > 0) {
                spollersTitle.nextElementSibling.hidden = false;
             }
          });
+      }
+   }
+   function setSpollerAction(e) {
+      const el = e.target;
+      if (el.hasAttribute('data-spoller') || el.closest('[data-spoller]')) {
+         const spollerTitle = el.hasAttribute('data-spoller') ? el : el.closest('[data-spoller]');
+         const spollersBlock = spollerTitle.closest('[data-spoller]');
+         const oneSpoller = spollersBlock.hasAttribute('data-one-spoller');
+         if(!spollersBlock.querySelectorAll('._slide').length){
+            if(oneSpoller && !spollerTitle.classList.contains('_active')){
+               hideSpollerBody(spollersBlock);
+            }
+            spollerTitle.classList.toggle('_active');
+            _slideToggle(spollersTitle.nextElementSibling, 500);
+         }
+         e.preventDefault();
       }
    }
 }
