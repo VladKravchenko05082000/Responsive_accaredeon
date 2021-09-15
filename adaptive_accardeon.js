@@ -65,4 +65,20 @@ if (spollersArray.length > 0) {
          }
       });
    }
+   function initSpollersBody(spollersBlock, hideSpollerBody = false) {
+      const spollersTitle = spollersBlock.querySelectorAll('[data-spollers]');
+      if (spollersTitle.length > 0) {
+         spollersTitle.forEach(spollersTitle => {
+            if (hideSpollerBody) {
+               spollersTitle.removeAttribute('tabindex');
+               if (!spollersTitle.classList.contains('_active')) {
+                  spollersTitle.nextElementSibling.hidden = true;
+               }
+            } else {
+               spollersTitle.setAttribute('tabindex', '-1');
+               spollersTitle.nextElementSibling.hidden = false;
+            }
+         });
+      }
+   }
 }
